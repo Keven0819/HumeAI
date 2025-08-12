@@ -182,20 +182,21 @@ class EVIManager: NSObject, ObservableObject {
             await MainActor.run {
                 switch type {
                 case "audio_output":
-                    if let audioData = json["audio"] as? String {
+                    if let audioData = json["data"] as? String {
                         playAudioFromBase64(audioData)
                     }
                     
                 case "user_message", "assistant_message":
-                    if let content = json["content"] as? String {
+                    if let message = json["message"] as? [String: Any],
+                       let content = message["content"] as? String {
                         let emotions = extractEmotions(from: json)
-                        let message = EVIMessage(
+                        let eviMessage = EVIMessage(
                             type: type,
                             content: content,
                             isUser: type == "user_message",
                             emotions: emotions
                         )
-                        chatMessages.append(message)
+                        chatMessages.append(eviMessage)
                         
                         if let emotions = emotions, !emotions.isEmpty {
                             currentEmotion = EmotionData(emotions: emotions)
