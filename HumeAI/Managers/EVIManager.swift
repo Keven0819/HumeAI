@@ -282,7 +282,7 @@ extension EVIManager: AudioManagerDelegate {
         
         let audioInput: [String: Any] = [
             "type": "audio_input",
-            "audio": data
+            "data": data
         ]
         
         Task {
